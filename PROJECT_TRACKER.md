@@ -58,17 +58,14 @@ Each improvement must be tested before moving to the next stage.
 
 ### Tasks
 
-* [ ] Review current project structure
-* [ ] Review existing modules
-* [ ] Review dependencies
-* [ ] Review GPIO assignments
-* [ ] Review phase measurement system
-* [ ] Review phase selection logic
-* [ ] Review protection mechanisms
-* [ ] Review Web Server architecture
-* [ ] Define the new software architecture
+* [ ] Review current hardware architecture
+* [ ] Design new hardware architecture 
+* [ ] Review protection mechanism
+* [ ] Review current software architecture
+* [ ] Define dependencies
+* [ ] Design new software architecture 
 * [ ] Define module responsibilities
-* [ ] Document the V2 architecture
+* [ ] Document the new software architecture
 
 ### Target Architecture
 
@@ -90,9 +87,9 @@ Hardware
 
 ### Deliverable
 
-* [ ] V2 software architecture defined
-* [ ] Architecture documented
-* [ ] Refactoring plan defined
+* [ ] New software architecture defined
+* [ ] New hardware architecture defined
+* [ ] Architectures documented
 
 ---
 
@@ -104,17 +101,10 @@ Refactor the existing software according to the new architecture.
 
 ### Tasks
 
-* [ ] Reorganize project directories
 * [ ] Separate application logic from hardware access
 * [ ] Create or improve PAL/HAL interfaces
-* [ ] Refactor phase monitoring
-* [ ] Refactor voltage processing
 * [ ] Refactor phase selection logic
-* [ ] Refactor actuator control
 * [ ] Refactor safety logic
-* [ ] Refactor Web Server code
-* [ ] Remove duplicated code
-* [ ] Remove unnecessary global variables
 * [ ] Improve naming consistency
 * [ ] Improve error handling
 
@@ -128,7 +118,7 @@ Refactor the existing software according to the new architecture.
 
 ### Deliverable
 
-* [ ] Refactored V2 software architecture
+* [ ] Refactored new software architecture
 
 ---
 
@@ -222,7 +212,6 @@ Improve system status and fault indication.
 
 ### Tasks
 
-* [ ] Review existing LEDs
 * [ ] Define LED states
 * [ ] Define buzzer states
 * [ ] Define fault signaling patterns
@@ -256,17 +245,38 @@ System Status
 
 # Day 5 — Web UI V2
 
+**Milestone:** `Web UI V2`
+
+**Labels:** `web-ui` · `feature` · `monitoring`
+
 ### Objectives
 
-Improve the local Web UI to provide clearer system monitoring and control.
+Improve the local Web UI to provide clearer system monitoring, operating mode control, phase status visualization, and fault indication.
 
 ### Tasks
 
-* [ ] Review current Web UI
-* [ ] Improve layout
-* [ ] Improve visual hierarchy
+* [ ] Review the current Web UI
+* [ ] Redesign the main page
+* [ ] Improve the layout and visual hierarchy
+* [ ] Add a button to switch between **Automatic Mode** and **Manual Mode**
+* [ ] Display the current operating mode
 * [ ] Display L1 voltage
 * [ ] Display L2 voltage
 * [ ] Display L3 voltage
-* [ ] Display selected phase
-* [ ]
+* [ ] Display the currently selected phase
+* [ ] Add status indicators for L1, L2, and L3
+* [ ] Clearly indicate phases affected by **Undervoltage**
+* [ ] Clearly indicate phases affected by **Overvoltage**
+* [ ] Clearly indicate phases affected by **Voltage Spikes**
+* [ ] Display other important phase fault conditions
+* [ ] Clearly distinguish healthy and faulty phases
+* [ ] Add a **green LED indicator** for normal system operation
+* [ ] Add a **red LED indicator** for system faults or abnormal conditions
+* [ ] Integrate the LED indicators with the existing signaling system
+* [ ] Provide clear feedback when switching between Automatic and Manual modes
+* [ ] Test the Web UI in both operating modes
+* [ ] Test all phase status and fault indications
+
+### Expected Result
+
+The main Web UI should provide a clear overview of the three phases, the selected phase, the current operating mode, and any detected electrical anomalies, while allowing the user to switch between **Automatic** and **Manual** modes.

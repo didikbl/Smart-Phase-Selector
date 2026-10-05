@@ -1,0 +1,3075 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Smart Phase Selector</title>
+
+
+    <style>
+
+
+        :root {
+
+            --panel-grad:
+                linear-gradient(
+                    145deg,
+                    #7a766a,
+                    #5a574f
+                );
+
+            --screen-bg: #0f1a0f;
+
+            --trace-color: #00ff41;
+
+            --led-red-on: #ff0000;
+            --led-grn-on: #00ff00;
+
+            --cyber-blue: #00f2ff;
+
+            --cyber-blue-glow:
+                rgba(0, 242, 255, 0.7);
+
+            --warning-orange: #ff9d00;
+
+
+            /*
+             * Switchs rétro
+             */
+
+            --sw-width: 16vw;
+
+            --sw-max-width: 58px;
+
+        }
+
+
+        * {
+
+            box-sizing: border-box;
+
+        }
+
+
+        body {
+
+            background-color: #0a0a0a;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            min-height: 100vh;
+
+            margin: 0;
+
+            font-family:
+                'Segoe UI',
+                sans-serif;
+
+            overflow: hidden;
+
+        }
+
+
+        /* =====================================================
+           ENGINEERING PANEL
+        ===================================================== */
+
+        .engineering-panel {
+
+            width: 95vw;
+
+            max-width: 400px;
+
+            height: 95vh;
+
+            background:
+                var(--panel-grad);
+
+            padding: 15px;
+
+            border-radius: 15px;
+
+            border: 3px solid #333;
+
+            box-shadow:
+
+                0 20px 50px
+                rgba(0,0,0,0.8),
+
+                inset 1px 1px 2px
+                rgba(255,255,255,0.2);
+
+            position: relative;
+
+            display: flex;
+
+            flex-direction: column;
+
+            min-height: 0;
+
+        }
+
+
+        /* =====================================================
+           SCREWS
+        ===================================================== */
+
+        .screw {
+
+            position: absolute;
+
+            width: 12px;
+
+            height: 12px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    #888,
+                    #222
+                );
+
+            border-radius: 50%;
+
+            box-shadow:
+                1px 1px 2px black;
+
+        }
+
+
+        .top-l {
+
+            top: 8px;
+
+            left: 8px;
+
+        }
+
+
+        .top-r {
+
+            top: 8px;
+
+            right: 8px;
+
+        }
+
+
+        .bot-l {
+
+            bottom: 8px;
+
+            left: 8px;
+
+        }
+
+
+        .bot-r {
+
+            bottom: 8px;
+
+            right: 8px;
+
+        }
+
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
+
+        #cyber-toast {
+
+            position: absolute;
+
+            top: 12%;
+
+            left: 50%;
+
+            transform:
+                translateX(-50%)
+                translateY(-10px);
+
+            background:
+                rgba(0,20,30,0.9);
+
+            border:
+                1px solid var(--cyber-blue);
+
+            color:
+                var(--cyber-blue);
+
+            padding:
+                8px 15px;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            pointer-events: none;
+
+            opacity: 0;
+
+            transition: 0.4s;
+
+            z-index: 100;
+
+            box-shadow:
+                0 0 15px
+                var(--cyber-blue-glow);
+
+            white-space: nowrap;
+
+        }
+
+
+        #cyber-toast.show {
+
+            opacity: 1;
+
+            transform:
+                translateX(-50%)
+                translateY(0);
+
+        }
+
+
+        /* =====================================================
+           LEDS
+        ===================================================== */
+
+        .led-indicator-bar {
+
+            display: flex;
+
+            justify-content:
+                space-around;
+
+            margin-bottom: 9px;
+
+        }
+
+
+        .led-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+        }
+
+
+        .led {
+
+            width: 14px;
+
+            height: 14px;
+
+            border-radius: 50%;
+
+            border: 2px solid #222;
+
+            margin-bottom: 3px;
+
+            transition: 0.3s;
+
+        }
+
+
+        .led-label {
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            color: #1a1a1a;
+
+            text-transform: uppercase;
+
+        }
+
+
+        .led-normal.active {
+
+            background:
+                var(--led-grn-on);
+
+            box-shadow:
+                0 0 10px
+                var(--led-grn-on);
+
+        }
+
+
+        .led-fault.active {
+
+            background:
+                var(--led-red-on);
+
+            box-shadow:
+                0 0 10px
+                var(--led-red-on);
+
+            animation:
+                blink 0.5s infinite;
+
+        }
+
+
+        @keyframes blink {
+
+            50% {
+
+                opacity: 0.3;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           MAIN DISPLAY
+        ===================================================== */
+
+        .display-container {
+
+            background: #111;
+
+            padding: 8px;
+
+            border-radius: 10px;
+
+            box-shadow:
+                inset 0 0 15px #000;
+
+            border: 1px solid #444;
+
+            flex: 1;
+
+            min-height: 0;
+
+            margin-bottom: 12px;
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .main-screen {
+
+            flex: 1;
+
+            min-height: 0;
+
+            background-color:
+                var(--screen-bg);
+
+            position: relative;
+
+            overflow: hidden;
+
+            border-radius: 4px;
+
+            border:
+                1px solid #1a2e1a;
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        /* =====================================================
+           SCREEN CONTENT + SCROLL
+        ===================================================== */
+
+        .screen-content {
+
+            padding: 10px;
+
+            color:
+                var(--trace-color);
+
+            font-family:
+                'Courier New',
+                monospace;
+
+            font-size: 11px;
+
+            flex: 1;
+
+            min-height: 0;
+
+            /*
+             * Le contenu peut maintenant
+             * défiler verticalement.
+             */
+
+            overflow-y: auto;
+
+            overflow-x: hidden;
+
+            /*
+             * Firefox
+             */
+
+            scrollbar-width: thin;
+
+            scrollbar-color:
+                #176b2b
+                #050a05;
+
+        }
+
+
+        /*
+         * Barre de défilement
+         * Chrome / Edge / Safari
+         */
+
+        .screen-content::-webkit-scrollbar {
+
+            width: 7px;
+
+        }
+
+
+        .screen-content::-webkit-scrollbar-track {
+
+            background: #050a05;
+
+            border-left:
+                1px solid
+                #1a2e1a;
+
+        }
+
+
+        .screen-content::-webkit-scrollbar-thumb {
+
+            background:
+                #176b2b;
+
+            border-radius: 4px;
+
+            border:
+                1px solid
+                #00ff41;
+
+        }
+
+
+        .screen-content::-webkit-scrollbar-thumb:hover {
+
+            background:
+                #00ff41;
+
+        }
+
+
+        .screen-title {
+
+            font-size: 9px;
+
+            opacity: 0.55;
+
+            margin-bottom: 7px;
+
+            letter-spacing: 0.5px;
+
+        }
+
+
+        /* =====================================================
+           MODE AREA
+        ===================================================== */
+
+        .mode-area {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            padding: 6px 8px;
+
+            margin-bottom: 7px;
+
+            background:
+                rgba(0,255,65,0.05);
+
+            border:
+                1px solid
+                rgba(0,255,65,0.12);
+
+        }
+
+
+        .mode-label {
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            color: #777;
+
+        }
+
+
+        .mode-display {
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        .mode-auto {
+
+            color:
+                var(--trace-color);
+
+        }
+
+
+        .mode-manual {
+
+            color:
+                var(--warning-orange);
+
+        }
+
+
+        /* =====================================================
+           MODE TOGGLE
+        ===================================================== */
+
+        .mode-toggle {
+
+            position: relative;
+
+            width: 46px;
+
+            height: 22px;
+
+            display: inline-block;
+
+        }
+
+
+        .mode-toggle input {
+
+            display: none;
+
+        }
+
+
+        .mode-slider {
+
+            position: absolute;
+
+            inset: 0;
+
+            background: #222;
+
+            border: 1px solid #555;
+
+            border-radius: 20px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+        }
+
+
+        .mode-slider::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 16px;
+
+            height: 16px;
+
+            left: 2px;
+
+            top: 2px;
+
+            background: #888;
+
+            border-radius: 50%;
+
+            transition: 0.2s;
+
+        }
+
+
+        .mode-toggle input:checked
+        + .mode-slider {
+
+            background: #38250b;
+
+            border-color:
+                var(--warning-orange);
+
+        }
+
+
+        .mode-toggle input:checked
+        + .mode-slider::before {
+
+            transform:
+                translateX(24px);
+
+            background:
+                var(--warning-orange);
+
+            box-shadow:
+                0 0 7px
+                var(--warning-orange);
+
+        }
+
+
+        /* =====================================================
+           MANUAL WARNING
+        ===================================================== */
+
+        #manual-warning {
+
+            display: none;
+
+            padding: 6px 8px;
+
+            margin-bottom: 7px;
+
+            border:
+                1px solid
+                var(--warning-orange);
+
+            background:
+                rgba(255,157,0,0.08);
+
+            color:
+                var(--warning-orange);
+
+            font-size: 9px;
+
+            line-height: 1.3;
+
+        }
+
+
+        /* =====================================================
+           PHASE INFORMATION
+        ===================================================== */
+
+        .phase-data {
+
+            background:
+                rgba(0,255,65,0.05);
+
+            border:
+                1px solid
+                rgba(0,255,65,0.1);
+
+            padding: 7px;
+
+            margin-bottom: 6px;
+
+        }
+
+
+        .phase-data.selected {
+
+            border-color:
+                var(--trace-color);
+
+            box-shadow:
+                0 0 7px
+                rgba(0,255,65,0.15);
+
+        }
+
+
+        .phase-header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            margin-bottom: 4px;
+
+        }
+
+
+        .phase-name {
+
+            font-weight: bold;
+
+            font-size: 10px;
+
+            color:
+                var(--trace-color);
+
+        }
+
+
+        .phase-selected {
+
+            font-size: 9px;
+
+            color: #666;
+
+        }
+
+
+        .phase-data.selected
+        .phase-selected {
+
+            color:
+                var(--trace-color);
+
+        }
+
+
+        .phase-voltage {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .rms-label {
+
+            color: #777;
+
+            font-size: 9px;
+
+        }
+
+
+        .rms-value {
+
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+        }
+
+
+        .rms-unit {
+
+            font-size: 9px;
+
+            color: #777;
+
+        }
+
+
+        /* =====================================================
+           DIAGNOSTICS
+        ===================================================== */
+
+        .phase-diagnostics {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 3px;
+
+        }
+
+
+        .diagnostic {
+
+            background: #050a05;
+
+            padding: 4px 2px;
+
+            text-align: center;
+
+            border-top:
+                1px solid #1a2e1a;
+
+            font-size: 8px;
+
+            color: #666;
+
+        }
+
+
+        .diagnostic .value {
+
+            display: block;
+
+            margin-top: 2px;
+
+            color: #555;
+
+            font-weight: bold;
+
+            font-size: 8px;
+
+        }
+
+
+        .diagnostic.active {
+
+            color: #ff3030;
+
+            border-color: #ff3030;
+
+        }
+
+
+        .diagnostic.active .value {
+
+            color: #ff3030;
+
+        }
+
+
+        /* =====================================================
+           CONNECTION
+        ===================================================== */
+
+        .connection-line {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            margin-top: 6px;
+
+            padding-top: 5px;
+
+            border-top:
+                1px solid
+                rgba(0,255,65,0.15);
+
+            font-size: 8px;
+
+            color: #555;
+
+        }
+
+
+        .connection-online {
+
+            color:
+                var(--trace-color);
+
+        }
+
+
+        .connection-error {
+
+            color: #ff3030;
+
+        }
+
+
+        /* =====================================================
+           MINI OSCILLOSCOPE
+        ===================================================== */
+
+        .mini-scope {
+
+            height: 32px;
+
+            background: #050a05;
+
+            position: relative;
+
+            border-top:
+                1px solid #1a2e1a;
+
+            margin-top: auto;
+
+        }
+
+
+        canvas {
+
+            width: 100%;
+
+            height: 100%;
+
+        }
+
+
+        /* =====================================================
+           PHASE SWITCH AREA
+        ===================================================== */
+
+        .switch-area {
+
+            background:
+                rgba(0,0,0,0.2);
+
+            padding: 10px 5px;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            justify-content:
+                space-evenly;
+
+            align-items: center;
+
+            margin-bottom: 0;
+
+        }
+
+
+        .sw-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+        }
+
+
+        .sw-label {
+
+            font-size: 9px;
+
+            font-weight: 900;
+
+            color: #151515;
+
+            text-transform: uppercase;
+
+            margin-bottom: 6px;
+
+        }
+
+
+        /* =====================================================
+           RETRO PHASE SWITCH
+        ===================================================== */
+
+        .switch {
+
+            background-color: black;
+
+            width:
+                var(--sw-width);
+
+            max-width:
+                var(--sw-max-width);
+
+            height:
+                calc(var(--sw-width) * 1.3);
+
+            max-height:
+                calc(var(--sw-max-width) * 1.3);
+
+            box-shadow:
+
+                0 0 10px black,
+
+                inset 0 0 2px 6px
+                #47434c,
+
+                inset 0 0 2px 10px
+                black;
+
+            border-radius: 4px;
+
+            padding: 5px;
+
+            perspective: 600px;
+
+            position: relative;
+
+        }
+
+
+        .switch input {
+
+            display: none;
+
+        }
+
+
+        .button {
+
+            transition:
+                all 0.3s
+                cubic-bezier(1,0,1,1);
+
+            transform-origin:
+                center center -10px;
+
+            transform:
+                translateZ(10px)
+                rotateX(-25deg);
+
+            transform-style:
+                preserve-3d;
+
+            width: 100%;
+
+            height: 100%;
+
+            position: relative;
+
+            cursor: pointer;
+
+            background:
+                linear-gradient(
+                    #333 0%,
+                    #111 100%
+                );
+
+        }
+
+
+        .switch input:checked
+        + .button {
+
+            transform:
+                translateZ(10px)
+                rotateX(25deg);
+
+        }
+
+
+        .sw-phase1 {
+
+            --sw-color:
+                #18ffa0;
+
+        }
+
+
+        .sw-phase2 {
+
+            --sw-color:
+                #00f2ff;
+
+        }
+
+
+        .sw-phase3 {
+
+            --sw-color:
+                #ff1818;
+
+        }
+
+
+        .switch input:checked
+        + .button {
+
+            box-shadow:
+                0 -5px 15px
+                var(--sw-color);
+
+        }
+
+
+        .light {
+
+            opacity: 0;
+
+            position: absolute;
+
+            width: 100%;
+
+            height: 100%;
+
+            background-image:
+                radial-gradient(
+                    white,
+                    var(--sw-color) 45%,
+                    transparent 75%
+                );
+
+        }
+
+
+        .switch input:checked
+        + .button .light {
+
+            opacity: 1;
+
+            animation:
+                flicker 0.2s infinite;
+
+        }
+
+
+        .dots {
+
+            position: absolute;
+
+            width: 100%;
+
+            height: 100%;
+
+            background-image:
+                radial-gradient(
+                    transparent 30%,
+                    rgba(0,0,0,0.4) 70%
+                );
+
+            background-size: 4px 4px;
+
+        }
+
+
+        .characters {
+
+            position: absolute;
+
+            width: 100%;
+
+            height: 100%;
+
+            background:
+
+                linear-gradient(
+                    white,
+                    white
+                )
+                50% 20% / 5% 18%
+                no-repeat,
+
+                radial-gradient(
+                    circle,
+                    transparent 50%,
+                    white 52%,
+                    white 72%,
+                    transparent 74%
+                )
+                50% 80% / 30% 25%
+                no-repeat;
+
+            opacity: 0.6;
+
+        }
+
+
+        .shine {
+
+            position: absolute;
+
+            width: 100%;
+
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    white,
+                    transparent 3%
+                )
+                50% 50% / 97% 97%;
+
+            opacity: 0.3;
+
+        }
+
+
+        /* =====================================================
+           DISABLED PHASE SWITCH
+        ===================================================== */
+
+        .switch.phase-disabled {
+
+            opacity: 0.35;
+
+        }
+
+
+        .switch.phase-disabled
+        .button {
+
+            cursor: not-allowed;
+
+            filter:
+                grayscale(1);
+
+        }
+
+
+        /* =====================================================
+           FLICKER
+        ===================================================== */
+
+        @keyframes flicker {
+
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 1;
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 400px) {
+
+            .engineering-panel {
+
+                width: 96vw;
+
+                height: 96vh;
+
+                padding: 12px;
+
+            }
+
+
+            .screen-content {
+
+                padding: 9px;
+
+            }
+
+
+            .phase-data {
+
+                padding: 6px;
+
+            }
+
+
+            .phase-diagnostics {
+
+                gap: 2px;
+
+            }
+
+
+            .diagnostic {
+
+                font-size: 7px;
+
+            }
+
+
+            .diagnostic .value {
+
+                font-size: 7px;
+
+            }
+
+
+            .switch-area {
+
+                padding-top: 9px;
+
+                padding-bottom: 9px;
+
+            }
+
+        }
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div id="cyber-toast">
+    SYSTEM ONLINE
+</div>
+
+
+<div class="engineering-panel">
+
+
+    <!-- =====================================================
+         SCREWS
+    ====================================================== -->
+
+    <div class="screw top-l"></div>
+
+    <div class="screw top-r"></div>
+
+    <div class="screw bot-l"></div>
+
+    <div class="screw bot-r"></div>
+
+
+    <!-- =====================================================
+         STATUS LEDS
+    ====================================================== -->
+
+    <div class="led-indicator-bar">
+
+
+        <div class="led-group">
+
+            <div
+                id="led-normal"
+                class="led led-normal">
+            </div>
+
+            <div class="led-label">
+                System OK
+            </div>
+
+        </div>
+
+
+        <div class="led-group">
+
+            <div
+                id="led-fault"
+                class="led led-fault">
+            </div>
+
+            <div class="led-label">
+                System Fault
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN DISPLAY
+    ====================================================== -->
+
+    <div class="display-container">
+
+
+        <div class="main-screen">
+
+
+            <div class="screen-content">
+
+
+                <div class="screen-title">
+
+                    SMART_PHASE_SELECTOR_v1.0
+
+                </div>
+
+
+                <!-- =================================================
+                     OPERATING MODE
+                ================================================== -->
+
+                <div class="mode-area">
+
+
+                    <span class="mode-label">
+
+                        OPERATING MODE
+
+                    </span>
+
+
+                    <div
+                        style="
+                            display:flex;
+                            align-items:center;
+                            gap:8px;
+                        "
+                    >
+
+
+                        <span
+                            id="mode-display"
+                            class="mode-display mode-auto"
+                        >
+
+                            AUTO
+
+                        </span>
+
+
+                        <label
+                            class="mode-toggle"
+                        >
+
+
+                            <input
+                                type="checkbox"
+                                id="mode-switch"
+                                onchange="
+                                    handleModeToggle()
+                                "
+                            >
+
+
+                            <span
+                                class="mode-slider"
+                            ></span>
+
+
+                        </label>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     MANUAL WARNING
+                ================================================== -->
+
+                <div
+                    id="manual-warning"
+                >
+
+                    ⚠ MANUAL MODE ACTIVE —
+                    AUTOMATIC PHASE SELECTION DISABLED —
+                    MANUAL SELECTION IS NOT RECOMMENDED
+
+                </div>
+
+
+                <!-- =================================================
+                     PHASE 1
+                ================================================== -->
+
+                <div
+                    id="phase1-card"
+                    class="phase-data"
+                >
+
+
+                    <div class="phase-header">
+
+
+                        <span class="phase-name">
+
+                            [ PHASE 1 ]
+
+                        </span>
+
+
+                        <span
+                            id="phase1-selected-label"
+                            class="phase-selected"
+                        >
+
+                            NOT SELECTED
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="phase-voltage">
+
+
+                        <span class="rms-label">
+
+                            RMS VOLTAGE
+
+                        </span>
+
+
+                        <span>
+
+
+                            <span
+                                id="phase1-rms"
+                                class="rms-value"
+                            >
+
+                                0.0
+
+                            </span>
+
+
+                            <span class="rms-unit">
+
+                                V
+
+                            </span>
+
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="phase-diagnostics">
+
+
+                        <div
+                            id="phase1-undervoltage"
+                            class="diagnostic"
+                        >
+
+                            UNDERVOLTAGE
+
+                            <span class="value">
+
+                                NORMAL
+
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="phase1-overvoltage"
+                            class="diagnostic"
+                        >
+
+                            OVERVOLTAGE
+
+                            <span class="value">
+
+                                NORMAL
+
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="phase1-spikes"
+                            class="diagnostic"
+                        >
+
+                            SPIKES
+
+                            <span class="value">
+
+                                NORMAL
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     PHASE 2
+                ================================================== -->
+
+                <div
+                    id="phase2-card"
+                    class="phase-data"
+                >
+
+
+                    <div class="phase-header">
+
+
+                        <span class="phase-name">
+
+                            [ PHASE 2 ]
+
+                        </span>
+
+
+                        <span
+                            id="phase2-selected-label"
+                            class="phase-selected"
+                        >
+
+                            NOT SELECTED
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="phase-voltage">
+
+
+                        <span class="rms-label">
+
+                            RMS VOLTAGE
+
+                        </span>
+
+
+                        <span>
+
+
+                            <span
+                                id="phase2-rms"
+                                class="rms-value"
+                            >
+
+                                0.0
+
+                            </span>
+
+
+                            <span class="rms-unit">
+
+                                V
+
+                            </span>
+
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="phase-diagnostics">
+
+
+                        <div
+                            id="phase2-undervoltage"
+                            class="diagnostic"
+                        >
+
+                            UNDERVOLTAGE
+
+                            <span class="value">
+
+                                NORMAL
+
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="phase2-overvoltage"
+                            class="diagnostic"
+                        >
+
+                            OVERVOLTAGE
+
+                            <span class="value">
+
+                                NORMAL
+
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="phase2-spikes"
+                            class="diagnostic"
+                        >
+
+                            SPIKES
+
+                            <span class="value">
+
+                                NORMAL
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     PHASE 3
+                ================================================== -->
+
+                <div
+                    id="phase3-card"
+                    class="phase-data"
+                >
+
+
+                    <div class="phase-header">
+
+
+                        <span class="phase-name">
+
+                            [ PHASE 3 ]
+
+                        </span>
+
+
+                        <span
+                            id="phase3-selected-label"
+                            class="phase-selected"
+                        >
+
+                            NOT SELECTED
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="phase-voltage">
+
+
+                        <span class="rms-label">
+
+                            RMS VOLTAGE
+
+                        </span>
+
+
+                        <span>
+
+
+                            <span
+                                id="phase3-rms"
+                                class="rms-value"
+                            >
+
+                                0.0
+
+                            </span>
+
+
+                            <span class="rms-unit">
+
+                                V
+
+                            </span>
+
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="phase-diagnostics">
+
+
+                        <div
+                            id="phase3-undervoltage"
+                            class="diagnostic"
+                        >
+
+                            UNDERVOLTAGE
+
+                            <span class="value">
+
+                                NORMAL
+
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="phase3-overvoltage"
+                            class="diagnostic"
+                        >
+
+                            OVERVOLTAGE
+
+                            <span class="value">
+
+                                NORMAL
+
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="phase3-spikes"
+                            class="diagnostic"
+                        >
+
+                            SPIKES
+
+                            <span class="value">
+
+                                NORMAL
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     CONNECTION STATUS
+                ================================================== -->
+
+                <div class="connection-line">
+
+
+                    <span>
+
+                        CONTROLLER
+
+                    </span>
+
+
+                    <span
+                        id="connection-status"
+                    >
+
+                        WAITING FOR ESP32...
+
+                    </span>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 OSCILLOSCOPE
+            ================================================== -->
+
+            <div class="mini-scope">
+
+                <canvas
+                    id="scopeCanvas"
+                ></canvas>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         PHASE SWITCHES
+    ====================================================== -->
+
+    <div class="switch-area">
+
+
+        <!-- PHASE 1 -->
+
+        <div class="sw-group">
+
+
+            <span class="sw-label">
+
+                Phase 1
+
+            </span>
+
+
+            <label
+                id="phase1-switch-container"
+                class="switch sw-phase1"
+            >
+
+
+                <input
+                    type="checkbox"
+                    id="phase1-switch"
+                    onchange="
+                        handlePhaseSelection(1)
+                    "
+                >
+
+
+                <div class="button">
+
+                    <div class="light"></div>
+
+                    <div class="dots"></div>
+
+                    <div class="characters"></div>
+
+                    <div class="shine"></div>
+
+                </div>
+
+
+            </label>
+
+
+        </div>
+
+
+        <!-- PHASE 2 -->
+
+        <div class="sw-group">
+
+
+            <span class="sw-label">
+
+                Phase 2
+
+            </span>
+
+
+            <label
+                id="phase2-switch-container"
+                class="switch sw-phase2"
+            >
+
+
+                <input
+                    type="checkbox"
+                    id="phase2-switch"
+                    onchange="
+                        handlePhaseSelection(2)
+                    "
+                >
+
+
+                <div class="button">
+
+                    <div class="light"></div>
+
+                    <div class="dots"></div>
+
+                    <div class="characters"></div>
+
+                    <div class="shine"></div>
+
+                </div>
+
+
+            </label>
+
+
+        </div>
+
+
+        <!-- PHASE 3 -->
+
+        <div class="sw-group">
+
+
+            <span class="sw-label">
+
+                Phase 3
+
+            </span>
+
+
+            <label
+                id="phase3-switch-container"
+                class="switch sw-phase3"
+            >
+
+
+                <input
+                    type="checkbox"
+                    id="phase3-switch"
+                    onchange="
+                        handlePhaseSelection(3)
+                    "
+                >
+
+
+                <div class="button">
+
+                    <div class="light"></div>
+
+                    <div class="dots"></div>
+
+                    <div class="characters"></div>
+
+                    <div class="shine"></div>
+
+                </div>
+
+
+            </label>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+/* =========================================================
+   SYSTEM STATE
+========================================================= */
+
+let manualMode = false;
+
+
+let phase1Rms = 0;
+let phase2Rms = 0;
+let phase3Rms = 0;
+
+
+let phase1Selected = false;
+let phase2Selected = false;
+let phase3Selected = false;
+
+
+let phase1Undervoltage = false;
+let phase2Undervoltage = false;
+let phase3Undervoltage = false;
+
+
+let phase1Overvoltage = false;
+let phase2Overvoltage = false;
+let phase3Overvoltage = false;
+
+
+let phase1Spikes = false;
+let phase2Spikes = false;
+let phase3Spikes = false;
+
+
+let normalOperation = false;
+let systemFault = false;
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById(
+            "cyber-toast"
+        );
+
+
+    toast.textContent = message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    setTimeout(() => {
+
+        toast.classList.remove(
+            "show"
+        );
+
+    }, 2000);
+
+}
+
+
+/* =========================================================
+   SEND COMMAND TO ESP32
+========================================================= */
+
+function sendCommand(command) {
+
+    fetch(
+        "/post-data",
+        {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+
+            },
+
+            body:
+                "data=" +
+                encodeURIComponent(command)
+
+        }
+    )
+
+    .then(response => {
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Command failed"
+            );
+
+        }
+
+
+        showToast(
+            "COMMAND SENT: " +
+            command
+        );
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+
+        showToast(
+            "COMMAND ERROR"
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   PHASE SELECTION
+========================================================= */
+
+function handlePhaseSelection(
+    selectedPhase
+) {
+
+
+    if (!manualMode) {
+
+        showToast(
+            "MANUAL MODE REQUIRED"
+        );
+
+
+        updatePhaseSwitches();
+
+
+        return;
+
+    }
+
+
+    const selectedSwitch =
+        document.getElementById(
+            `phase${selectedPhase}-switch`
+        );
+
+
+    const phaseCommands = {
+
+        1: {
+
+            activate:
+                "ACTIVE_LINE_1",
+
+            deactivate:
+                "LINE_1_INACTIVE"
+
+        },
+
+
+        2: {
+
+            activate:
+                "ACTIVE_LINE_2",
+
+            deactivate:
+                "LINE_2_INACTIVE"
+
+        },
+
+
+        3: {
+
+            activate:
+                "ACTIVE_LINE_3",
+
+            deactivate:
+                "LINE_3_INACTIVE"
+
+        }
+
+    };
+
+
+    /*
+     * Une seule phase peut être sélectionnée.
+     */
+
+    if (selectedSwitch.checked) {
+
+
+        for (
+            let phase = 1;
+            phase <= 3;
+            phase++
+        ) {
+
+
+            if (
+                phase !== selectedPhase
+            ) {
+
+                document.getElementById(
+                    `phase${phase}-switch`
+                ).checked = false;
+
+            }
+
+        }
+
+
+        sendCommand(
+            phaseCommands[
+                selectedPhase
+            ].activate
+        );
+
+    }
+
+
+    else {
+
+        sendCommand(
+            phaseCommands[
+                selectedPhase
+            ].deactivate
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   MODE TOGGLE
+========================================================= */
+
+function handleModeToggle() {
+
+    const modeSwitch =
+        document.getElementById(
+            "mode-switch"
+        );
+
+
+    if (modeSwitch.checked) {
+
+        manualMode = true;
+
+
+        sendCommand(
+            "SET_MODE_MANUAL"
+        );
+
+    }
+
+
+    else {
+
+        manualMode = false;
+
+
+        sendCommand(
+            "SET_MODE_AUTO"
+        );
+
+    }
+
+
+    updateOperatingModeDisplay();
+
+    updateManualControls();
+
+}
+
+
+/* =========================================================
+   UPDATE OPERATING MODE
+========================================================= */
+
+function updateOperatingModeDisplay() {
+
+    const modeDisplay =
+        document.getElementById(
+            "mode-display"
+        );
+
+
+    const warning =
+        document.getElementById(
+            "manual-warning"
+        );
+
+
+    const modeSwitch =
+        document.getElementById(
+            "mode-switch"
+        );
+
+
+    modeSwitch.checked =
+        manualMode;
+
+
+    if (manualMode) {
+
+
+        modeDisplay.textContent =
+            "MANUAL";
+
+
+        modeDisplay.classList.remove(
+            "mode-auto"
+        );
+
+
+        modeDisplay.classList.add(
+            "mode-manual"
+        );
+
+
+        warning.style.display =
+            "block";
+
+    }
+
+
+    else {
+
+
+        modeDisplay.textContent =
+            "AUTO";
+
+
+        modeDisplay.classList.remove(
+            "mode-manual"
+        );
+
+
+        modeDisplay.classList.add(
+            "mode-auto"
+        );
+
+
+        warning.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   ENABLE / DISABLE PHASE SWITCHES
+========================================================= */
+
+function updateManualControls() {
+
+
+    for (
+        let phase = 1;
+        phase <= 3;
+        phase++
+    ) {
+
+
+        const phaseSwitch =
+            document.getElementById(
+                `phase${phase}-switch`
+            );
+
+
+        const switchContainer =
+            document.getElementById(
+                `phase${phase}-switch-container`
+            );
+
+
+        phaseSwitch.disabled =
+            !manualMode;
+
+
+        switchContainer.classList.toggle(
+            "phase-disabled",
+            !manualMode
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SYNCHRONIZE PHASE SWITCHES
+========================================================= */
+
+function updatePhaseSwitches() {
+
+    document.getElementById(
+        "phase1-switch"
+    ).checked =
+        phase1Selected;
+
+
+    document.getElementById(
+        "phase2-switch"
+    ).checked =
+        phase2Selected;
+
+
+    document.getElementById(
+        "phase3-switch"
+    ).checked =
+        phase3Selected;
+
+}
+
+
+/* =========================================================
+   FETCH DATA FROM ESP32
+========================================================= */
+
+function fetchPhaseData() {
+
+    fetch(
+        "/fetch-data"
+    )
+
+    .then(response => {
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Fetch failed"
+            );
+
+        }
+
+
+        return response.json();
+
+    })
+
+
+    .then(data => {
+
+
+        /*
+         * ESP32 = SOURCE OF TRUTH
+         */
+
+
+        phase1Rms =
+            data.phase1Rms;
+
+
+        phase2Rms =
+            data.phase2Rms;
+
+
+        phase3Rms =
+            data.phase3Rms;
+
+
+        phase1Selected =
+            data.phase1Selected;
+
+
+        phase2Selected =
+            data.phase2Selected;
+
+
+        phase3Selected =
+            data.phase3Selected;
+
+
+        phase1Undervoltage =
+            data.phase1Undervoltage;
+
+
+        phase2Undervoltage =
+            data.phase2Undervoltage;
+
+
+        phase3Undervoltage =
+            data.phase3Undervoltage;
+
+
+        phase1Overvoltage =
+            data.phase1Overvoltage;
+
+
+        phase2Overvoltage =
+            data.phase2Overvoltage;
+
+
+        phase3Overvoltage =
+            data.phase3Overvoltage;
+
+
+        phase1Spikes =
+            data.phase1Spikes;
+
+
+        phase2Spikes =
+            data.phase2Spikes;
+
+
+        phase3Spikes =
+            data.phase3Spikes;
+
+
+        normalOperation =
+            data.normalOperation;
+
+
+        systemFault =
+            data.systemFault;
+
+
+        manualMode =
+            data.manualMode;
+
+
+        updateWebUI();
+
+    })
+
+
+    .catch(error => {
+
+        console.error(error);
+
+
+        const status =
+            document.getElementById(
+                "connection-status"
+            );
+
+
+        status.textContent =
+            "ESP32 CONNECTION ERROR";
+
+
+        status.classList.remove(
+            "connection-online"
+        );
+
+
+        status.classList.add(
+            "connection-error"
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   UPDATE COMPLETE WEB UI
+========================================================= */
+
+function updateWebUI() {
+
+    updateVoltageDisplay();
+
+    updatePhaseStatusDisplay();
+
+    updateSystemStatusDisplay();
+
+    updateOperatingModeDisplay();
+
+    updateManualControls();
+
+    updatePhaseSwitches();
+
+    updateConnectionStatus();
+
+}
+
+
+/* =========================================================
+   UPDATE RMS
+========================================================= */
+
+function updateVoltageDisplay() {
+
+    document.getElementById(
+        "phase1-rms"
+    ).textContent =
+        Number(
+            phase1Rms
+        ).toFixed(1);
+
+
+    document.getElementById(
+        "phase2-rms"
+    ).textContent =
+        Number(
+            phase2Rms
+        ).toFixed(1);
+
+
+    document.getElementById(
+        "phase3-rms"
+    ).textContent =
+        Number(
+            phase3Rms
+        ).toFixed(1);
+
+}
+
+
+/* =========================================================
+   UPDATE PHASE STATUS
+========================================================= */
+
+function updatePhaseStatusDisplay() {
+
+
+    updatePhase(
+
+        1,
+
+        phase1Selected,
+
+        phase1Undervoltage,
+
+        phase1Overvoltage,
+
+        phase1Spikes
+
+    );
+
+
+    updatePhase(
+
+        2,
+
+        phase2Selected,
+
+        phase2Undervoltage,
+
+        phase2Overvoltage,
+
+        phase2Spikes
+
+    );
+
+
+    updatePhase(
+
+        3,
+
+        phase3Selected,
+
+        phase3Undervoltage,
+
+        phase3Overvoltage,
+
+        phase3Spikes
+
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE ONE PHASE
+========================================================= */
+
+function updatePhase(
+
+    phaseNumber,
+
+    selected,
+
+    undervoltage,
+
+    overvoltage,
+
+    spikes
+
+) {
+
+
+    const card =
+        document.getElementById(
+            `phase${phaseNumber}-card`
+        );
+
+
+    const selectedLabel =
+        document.getElementById(
+            `phase${phaseNumber}-selected-label`
+        );
+
+
+    card.classList.toggle(
+        "selected",
+        selected
+    );
+
+
+    selectedLabel.textContent =
+        selected
+            ? "SELECTED"
+            : "NOT SELECTED";
+
+
+    updateDiagnostic(
+
+        `phase${phaseNumber}-undervoltage`,
+
+        undervoltage
+
+    );
+
+
+    updateDiagnostic(
+
+        `phase${phaseNumber}-overvoltage`,
+
+        overvoltage
+
+    );
+
+
+    updateDiagnostic(
+
+        `phase${phaseNumber}-spikes`,
+
+        spikes
+
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE DIAGNOSTIC
+========================================================= */
+
+function updateDiagnostic(
+
+    elementId,
+
+    faultActive
+
+) {
+
+
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+
+    const value =
+        element.querySelector(
+            ".value"
+        );
+
+
+    element.classList.toggle(
+        "active",
+        faultActive
+    );
+
+
+    value.textContent =
+        faultActive
+            ? "FAULT"
+            : "NORMAL";
+
+}
+
+
+/* =========================================================
+   SYSTEM STATUS LEDS
+========================================================= */
+
+function updateSystemStatusDisplay() {
+
+
+    const normalLed =
+        document.getElementById(
+            "led-normal"
+        );
+
+
+    const faultLed =
+        document.getElementById(
+            "led-fault"
+        );
+
+
+    normalLed.classList.toggle(
+        "active",
+        normalOperation
+    );
+
+
+    faultLed.classList.toggle(
+        "active",
+        systemFault
+    );
+
+}
+
+
+/* =========================================================
+   CONNECTION STATUS
+========================================================= */
+
+function updateConnectionStatus() {
+
+
+    const status =
+        document.getElementById(
+            "connection-status"
+        );
+
+
+    status.textContent =
+        "ESP32 CONNECTED";
+
+
+    status.classList.remove(
+        "connection-error"
+    );
+
+
+    status.classList.add(
+        "connection-online"
+    );
+
+}
+
+
+/* =========================================================
+   SIMPLE OSCILLOSCOPE VISUAL
+========================================================= */
+
+const canvas =
+    document.getElementById(
+        "scopeCanvas"
+    );
+
+
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
+
+
+let offset = 0;
+
+
+function animateScope() {
+
+
+    canvas.width =
+        canvas.offsetWidth;
+
+
+    canvas.height =
+        canvas.offsetHeight;
+
+
+    ctx.clearRect(
+
+        0,
+        0,
+        canvas.width,
+        canvas.height
+
+    );
+
+
+    /*
+     * Purely decorative.
+     * This waveform is NOT calculated
+     * from the RMS measurements.
+     */
+
+
+    if (
+
+        phase1Rms > 0 ||
+
+        phase2Rms > 0 ||
+
+        phase3Rms > 0
+
+    ) {
+
+
+        ctx.strokeStyle =
+            "#00ff41";
+
+
+        ctx.lineWidth = 1;
+
+
+        ctx.beginPath();
+
+
+        const amplitude =
+            canvas.height / 3;
+
+
+        for (
+
+            let x = 0;
+
+            x < canvas.width;
+
+            x++
+
+        ) {
+
+
+            const y =
+
+                canvas.height / 2 +
+
+                Math.sin(
+                    (x + offset) * 0.15
+                ) *
+                amplitude;
+
+
+            if (x === 0) {
+
+                ctx.moveTo(
+                    x,
+                    y
+                );
+
+            }
+
+
+            else {
+
+                ctx.lineTo(
+                    x,
+                    y
+                );
+
+            }
+
+        }
+
+
+        ctx.stroke();
+
+
+        offset += 2;
+
+    }
+
+
+    requestAnimationFrame(
+        animateScope
+    );
+
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+fetchPhaseData();
+
+
+/*
+ * ESP32 data refresh
+ * every 5 seconds.
+ */
+
+setInterval(
+
+    fetchPhaseData,
+
+    5000
+
+);
+
+
+animateScope();
+
+
+</script>
+
+
+</body>
+
+</html>
