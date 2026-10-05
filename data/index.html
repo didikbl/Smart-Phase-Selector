@@ -700,7 +700,9 @@ fetch("/post-data", {
  
     //fonction pour Prendre et Afficher les valeurs de differentes phases
     function fetch_data() {
-             fetch('/fetch-data')
+             fetch('/fetch-data', {
+        cache: 'no-store'
+    })
                   .then(response => response.json())
                   .then(data => {
                    document.getElementById('dsp1').innerHTML = data.value_1;

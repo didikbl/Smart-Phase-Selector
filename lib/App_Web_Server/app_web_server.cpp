@@ -33,6 +33,12 @@ void webserver_update_data(AsyncWebServerRequest *request)
      doc["value_2"] =  input_voltage[LINE_2];
      doc["value_3"] =  input_voltage[LINE_3];
 
+     float value_1 = input_voltage[LINE_1];
+     float value_2 = input_voltage[LINE_2]; 
+     float value_3 = input_voltage[LINE_3];
+     printf("LINE 1 : %f V \n",value_1);
+     printf("LINE 2 : %f V \n",value_2);
+     printf("LINE 3 : %f V \n",value_3);
      
      String json;
      serializeJson(doc, json); 

@@ -15,6 +15,9 @@
 //-------------------------------------------TEST STATION MODE-------------------------------------------
 static _wifi_running_mode_t get_wifi_running_mode();
 
+static float input_voltage [3];
+
+
 void init_phase_selector_system();
 
 void run_phase_selector_app();
@@ -26,7 +29,5 @@ static void publish_sensor_data(sensor_id_t sensor_id);
 static  active_line_t check_active_line();
 
 static void set_active_line();
-
-static float input_voltage [3];
 
 #endif 
