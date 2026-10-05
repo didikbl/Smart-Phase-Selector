@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 
 <head>
@@ -15,7 +16,6 @@
 
     <style>
 
-
         :root {
 
             --panel-grad:
@@ -30,6 +30,7 @@
             --trace-color: #00ff41;
 
             --led-red-on: #ff0000;
+
             --led-grn-on: #00ff00;
 
             --cyber-blue: #00f2ff;
@@ -58,6 +59,17 @@
         }
 
 
+        html {
+
+            width: 100%;
+
+            height: 100%;
+
+            overflow: hidden;
+
+        }
+
+
         body {
 
             background-color: #0a0a0a;
@@ -68,7 +80,13 @@
 
             align-items: center;
 
+            width: 100%;
+
+            height: 100%;
+
             min-height: 100vh;
+
+            min-height: 100dvh;
 
             margin: 0;
 
@@ -92,6 +110,10 @@
             max-width: 400px;
 
             height: 95vh;
+
+            height: 95dvh;
+
+            max-height: 95dvh;
 
             background:
                 var(--panel-grad);
@@ -117,6 +139,8 @@
             flex-direction: column;
 
             min-height: 0;
+
+            overflow: hidden;
 
         }
 
@@ -204,15 +228,16 @@
                 rgba(0,20,30,0.9);
 
             border:
-                1px solid var(--cyber-blue);
+                1px solid
+                var(--cyber-blue);
 
             color:
                 var(--cyber-blue);
 
             padding:
-                8px 15px;
+                9px 16px;
 
-            font-size: 11px;
+            font-size: 12px;
 
             text-transform: uppercase;
 
@@ -259,6 +284,8 @@
 
             margin-bottom: 9px;
 
+            flex-shrink: 0;
+
         }
 
 
@@ -292,7 +319,7 @@
 
         .led-label {
 
-            font-size: 9px;
+            font-size: 10px;
 
             font-weight: 800;
 
@@ -358,11 +385,15 @@
 
             border: 1px solid #444;
 
-            flex: 1;
+            /*
+             * L'écran prend tout l'espace disponible.
+             */
+
+            flex: 1 1 auto;
 
             min-height: 0;
 
-            margin-bottom: 12px;
+            margin-bottom: 5px;
 
             display: flex;
 
@@ -373,7 +404,7 @@
 
         .main-screen {
 
-            flex: 1;
+            flex: 1 1 auto;
 
             min-height: 0;
 
@@ -402,7 +433,7 @@
 
         .screen-content {
 
-            padding: 10px;
+            padding: 12px;
 
             color:
                 var(--trace-color);
@@ -411,24 +442,21 @@
                 'Courier New',
                 monospace;
 
-            font-size: 11px;
+            /*
+             * TEXTE AGRANDI
+             */
+
+            font-size: 13px;
+
+            line-height: 1.25;
 
             flex: 1;
 
             min-height: 0;
 
-            /*
-             * Le contenu peut maintenant
-             * défiler verticalement.
-             */
-
             overflow-y: auto;
 
             overflow-x: hidden;
-
-            /*
-             * Firefox
-             */
 
             scrollbar-width: thin;
 
@@ -438,11 +466,6 @@
 
         }
 
-
-        /*
-         * Barre de défilement
-         * Chrome / Edge / Safari
-         */
 
         .screen-content::-webkit-scrollbar {
 
@@ -486,11 +509,11 @@
 
         .screen-title {
 
-            font-size: 9px;
+            font-size: 11px;
 
             opacity: 0.55;
 
-            margin-bottom: 7px;
+            margin-bottom: 8px;
 
             letter-spacing: 0.5px;
 
@@ -510,9 +533,9 @@
 
             align-items: center;
 
-            padding: 6px 8px;
+            padding: 8px 9px;
 
-            margin-bottom: 7px;
+            margin-bottom: 8px;
 
             background:
                 rgba(0,255,65,0.05);
@@ -526,7 +549,7 @@
 
         .mode-label {
 
-            font-size: 10px;
+            font-size: 12px;
 
             font-weight: bold;
 
@@ -537,7 +560,7 @@
 
         .mode-display {
 
-            font-size: 12px;
+            font-size: 14px;
 
             font-weight: bold;
 
@@ -570,9 +593,9 @@
 
             position: relative;
 
-            width: 46px;
+            width: 48px;
 
-            height: 22px;
+            height: 24px;
 
             display: inline-block;
 
@@ -611,9 +634,9 @@
 
             position: absolute;
 
-            width: 16px;
+            width: 18px;
 
-            height: 16px;
+            height: 18px;
 
             left: 2px;
 
@@ -663,9 +686,9 @@
 
             display: none;
 
-            padding: 6px 8px;
+            padding: 7px 9px;
 
-            margin-bottom: 7px;
+            margin-bottom: 8px;
 
             border:
                 1px solid
@@ -677,9 +700,9 @@
             color:
                 var(--warning-orange);
 
-            font-size: 9px;
+            font-size: 11px;
 
-            line-height: 1.3;
+            line-height: 1.35;
 
         }
 
@@ -697,9 +720,9 @@
                 1px solid
                 rgba(0,255,65,0.1);
 
-            padding: 7px;
+            padding: 8px;
 
-            margin-bottom: 6px;
+            margin-bottom: 7px;
 
         }
 
@@ -725,7 +748,7 @@
 
             align-items: center;
 
-            margin-bottom: 4px;
+            margin-bottom: 5px;
 
         }
 
@@ -734,7 +757,7 @@
 
             font-weight: bold;
 
-            font-size: 10px;
+            font-size: 12px;
 
             color:
                 var(--trace-color);
@@ -744,7 +767,7 @@
 
         .phase-selected {
 
-            font-size: 9px;
+            font-size: 11px;
 
             color: #666;
 
@@ -769,7 +792,7 @@
 
             align-items: center;
 
-            margin-bottom: 5px;
+            margin-bottom: 6px;
 
         }
 
@@ -778,7 +801,7 @@
 
             color: #777;
 
-            font-size: 9px;
+            font-size: 11px;
 
         }
 
@@ -787,7 +810,7 @@
 
             color: white;
 
-            font-size: 18px;
+            font-size: 21px;
 
             font-weight: bold;
 
@@ -796,7 +819,7 @@
 
         .rms-unit {
 
-            font-size: 9px;
+            font-size: 11px;
 
             color: #777;
 
@@ -814,7 +837,7 @@
             grid-template-columns:
                 repeat(3, 1fr);
 
-            gap: 3px;
+            gap: 4px;
 
         }
 
@@ -823,14 +846,14 @@
 
             background: #050a05;
 
-            padding: 4px 2px;
+            padding: 5px 3px;
 
             text-align: center;
 
             border-top:
                 1px solid #1a2e1a;
 
-            font-size: 8px;
+            font-size: 10px;
 
             color: #666;
 
@@ -847,7 +870,7 @@
 
             font-weight: bold;
 
-            font-size: 8px;
+            font-size: 10px;
 
         }
 
@@ -879,15 +902,15 @@
             justify-content:
                 space-between;
 
-            margin-top: 6px;
+            margin-top: 7px;
 
-            padding-top: 5px;
+            padding-top: 6px;
 
             border-top:
                 1px solid
                 rgba(0,255,65,0.15);
 
-            font-size: 8px;
+            font-size: 10px;
 
             color: #555;
 
@@ -915,7 +938,9 @@
 
         .mini-scope {
 
-            height: 32px;
+            height: 36px;
+
+            flex-shrink: 0;
 
             background: #050a05;
 
@@ -947,7 +972,13 @@
             background:
                 rgba(0,0,0,0.2);
 
-            padding: 10px 5px;
+            /*
+             * Zone plus compacte :
+             * les switches remontent et restent visibles.
+             */
+
+            padding:
+                5px 5px 2px;
 
             border-radius: 10px;
 
@@ -956,9 +987,11 @@
             justify-content:
                 space-evenly;
 
-            align-items: center;
+            align-items: flex-end;
 
             margin-bottom: 0;
+
+            flex-shrink: 0;
 
         }
 
@@ -976,7 +1009,7 @@
 
         .sw-label {
 
-            font-size: 9px;
+            font-size: 11px;
 
             font-weight: 900;
 
@@ -984,7 +1017,7 @@
 
             text-transform: uppercase;
 
-            margin-bottom: 6px;
+            margin-bottom: 5px;
 
         }
 
@@ -1245,15 +1278,21 @@
         @keyframes flicker {
 
             0% {
+
                 opacity: 1;
+
             }
 
             50% {
+
                 opacity: 0.8;
+
             }
 
             100% {
+
                 opacity: 1;
+
             }
 
         }
@@ -1263,7 +1302,7 @@
            MOBILE
         ===================================================== */
 
-        @media (max-width: 400px) {
+        @media (max-width: 500px) {
 
             .engineering-panel {
 
@@ -1271,7 +1310,225 @@
 
                 height: 96vh;
 
-                padding: 12px;
+                height: 96dvh;
+
+                max-height: 96dvh;
+
+                padding: 10px;
+
+                border-radius: 13px;
+
+            }
+
+
+            .led-indicator-bar {
+
+                margin-bottom: 6px;
+
+            }
+
+
+            .led-label {
+
+                font-size: 9px;
+
+            }
+
+
+            .display-container {
+
+                padding: 6px;
+
+                margin-bottom: 3px;
+
+            }
+
+
+            .screen-content {
+
+                padding: 11px;
+
+                font-size: 13px;
+
+            }
+
+
+            .screen-title {
+
+                font-size: 10px;
+
+            }
+
+
+            .mode-area {
+
+                padding: 8px;
+
+                margin-bottom: 7px;
+
+            }
+
+
+            .mode-label {
+
+                font-size: 11px;
+
+            }
+
+
+            .mode-display {
+
+                font-size: 14px;
+
+            }
+
+
+            .phase-data {
+
+                padding: 8px;
+
+                margin-bottom: 6px;
+
+            }
+
+
+            .phase-name {
+
+                font-size: 12px;
+
+            }
+
+
+            .phase-selected {
+
+                font-size: 10px;
+
+            }
+
+
+            .rms-label {
+
+                font-size: 11px;
+
+            }
+
+
+            .rms-value {
+
+                font-size: 21px;
+
+            }
+
+
+            .rms-unit {
+
+                font-size: 11px;
+
+            }
+
+
+            /*
+             * IMPORTANT :
+             * on ne réduit plus les diagnostics à 7px.
+             */
+
+            .diagnostic {
+
+                font-size: 9px;
+
+                padding: 5px 2px;
+
+            }
+
+
+            .diagnostic .value {
+
+                font-size: 9px;
+
+            }
+
+
+            .connection-line {
+
+                font-size: 9px;
+
+            }
+
+
+            .mini-scope {
+
+                height: 32px;
+
+            }
+
+
+            /*
+             * SWITCHES REMONTÉS
+             */
+
+            .switch-area {
+
+                padding:
+                    4px 5px 1px;
+
+            }
+
+
+            .sw-label {
+
+                font-size: 10px;
+
+                margin-bottom: 4px;
+
+            }
+
+
+            /*
+             * Légèrement plus petits sur mobile
+             * pour garantir leur visibilité complète.
+             */
+
+            .switch {
+
+                width: 15vw;
+
+                height:
+                    calc(15vw * 1.25);
+
+                max-width: 52px;
+
+                max-height: 65px;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           PETITS ÉCRANS EN HAUTEUR
+        ===================================================== */
+
+        @media (max-height: 700px) {
+
+            .engineering-panel {
+
+                height: 97dvh;
+
+                padding: 8px;
+
+            }
+
+
+            .led-indicator-bar {
+
+                margin-bottom: 4px;
+
+            }
+
+
+            .display-container {
+
+                margin-bottom: 2px;
 
             }
 
@@ -1287,40 +1544,51 @@
 
                 padding: 6px;
 
-            }
-
-
-            .phase-diagnostics {
-
-                gap: 2px;
+                margin-bottom: 5px;
 
             }
 
 
-            .diagnostic {
+            .mode-area {
 
-                font-size: 7px;
+                padding: 6px 8px;
+
+                margin-bottom: 6px;
 
             }
 
 
-            .diagnostic .value {
+            .mini-scope {
 
-                font-size: 7px;
+                height: 28px;
 
             }
 
 
             .switch-area {
 
-                padding-top: 9px;
+                padding:
+                    3px 5px 0;
 
-                padding-bottom: 9px;
+            }
+
+
+            .sw-label {
+
+                margin-bottom: 3px;
+
+            }
+
+
+            .switch {
+
+                max-width: 48px;
+
+                max-height: 60px;
 
             }
 
         }
-
 
     </style>
 
@@ -1331,7 +1599,9 @@
 
 
 <div id="cyber-toast">
+
     SYSTEM ONLINE
+
 </div>
 
 
@@ -1366,7 +1636,9 @@
             </div>
 
             <div class="led-label">
+
                 System OK
+
             </div>
 
         </div>
@@ -1380,11 +1652,12 @@
             </div>
 
             <div class="led-label">
+
                 System Fault
+
             </div>
 
         </div>
-
 
     </div>
 
@@ -2071,31 +2344,25 @@
 
 let manualMode = false;
 
-
 let phase1Rms = 0;
 let phase2Rms = 0;
 let phase3Rms = 0;
-
 
 let phase1Selected = false;
 let phase2Selected = false;
 let phase3Selected = false;
 
-
 let phase1Undervoltage = false;
 let phase2Undervoltage = false;
 let phase3Undervoltage = false;
-
 
 let phase1Overvoltage = false;
 let phase2Overvoltage = false;
 let phase3Overvoltage = false;
 
-
 let phase1Spikes = false;
 let phase2Spikes = false;
 let phase3Spikes = false;
-
 
 let normalOperation = false;
 let systemFault = false;
@@ -2112,14 +2379,11 @@ function showToast(message) {
             "cyber-toast"
         );
 
-
     toast.textContent = message;
-
 
     toast.classList.add(
         "show"
     );
-
 
     setTimeout(() => {
 
@@ -2141,7 +2405,6 @@ function sendCommand(command) {
     fetch(
         "/post-data",
         {
-
             method: "POST",
 
             headers: {
@@ -2168,7 +2431,6 @@ function sendCommand(command) {
 
         }
 
-
         showToast(
             "COMMAND SENT: " +
             command
@@ -2179,7 +2441,6 @@ function sendCommand(command) {
     .catch(error => {
 
         console.error(error);
-
 
         showToast(
             "COMMAND ERROR"
@@ -2198,16 +2459,13 @@ function handlePhaseSelection(
     selectedPhase
 ) {
 
-
     if (!manualMode) {
 
         showToast(
             "MANUAL MODE REQUIRED"
         );
 
-
         updatePhaseSwitches();
-
 
         return;
 
@@ -2263,13 +2521,15 @@ function handlePhaseSelection(
 
     if (selectedSwitch.checked) {
 
-
         for (
-            let phase = 1;
-            phase <= 3;
-            phase++
-        ) {
 
+            let phase = 1;
+
+            phase <= 3;
+
+            phase++
+
+        ) {
 
             if (
                 phase !== selectedPhase
@@ -2322,7 +2582,6 @@ function handleModeToggle() {
 
         manualMode = true;
 
-
         sendCommand(
             "SET_MODE_MANUAL"
         );
@@ -2333,7 +2592,6 @@ function handleModeToggle() {
     else {
 
         manualMode = false;
-
 
         sendCommand(
             "SET_MODE_AUTO"
@@ -2379,7 +2637,6 @@ function updateOperatingModeDisplay() {
 
     if (manualMode) {
 
-
         modeDisplay.textContent =
             "MANUAL";
 
@@ -2401,7 +2658,6 @@ function updateOperatingModeDisplay() {
 
 
     else {
-
 
         modeDisplay.textContent =
             "AUTO";
@@ -2431,13 +2687,15 @@ function updateOperatingModeDisplay() {
 
 function updateManualControls() {
 
-
     for (
-        let phase = 1;
-        phase <= 3;
-        phase++
-    ) {
 
+        let phase = 1;
+
+        phase <= 3;
+
+        phase++
+
+    ) {
 
         const phaseSwitch =
             document.getElementById(
@@ -2511,7 +2769,6 @@ function fetchPhaseData() {
 
         }
 
-
         return response.json();
 
     })
@@ -2519,19 +2776,15 @@ function fetchPhaseData() {
 
     .then(data => {
 
-
         /*
          * ESP32 = SOURCE OF TRUTH
          */
 
-
         phase1Rms =
             data.phase1Rms;
 
-
         phase2Rms =
             data.phase2Rms;
-
 
         phase3Rms =
             data.phase3Rms;
@@ -2540,10 +2793,8 @@ function fetchPhaseData() {
         phase1Selected =
             data.phase1Selected;
 
-
         phase2Selected =
             data.phase2Selected;
-
 
         phase3Selected =
             data.phase3Selected;
@@ -2552,10 +2803,8 @@ function fetchPhaseData() {
         phase1Undervoltage =
             data.phase1Undervoltage;
 
-
         phase2Undervoltage =
             data.phase2Undervoltage;
-
 
         phase3Undervoltage =
             data.phase3Undervoltage;
@@ -2564,10 +2813,8 @@ function fetchPhaseData() {
         phase1Overvoltage =
             data.phase1Overvoltage;
 
-
         phase2Overvoltage =
             data.phase2Overvoltage;
-
 
         phase3Overvoltage =
             data.phase3Overvoltage;
@@ -2576,10 +2823,8 @@ function fetchPhaseData() {
         phase1Spikes =
             data.phase1Spikes;
 
-
         phase2Spikes =
             data.phase2Spikes;
-
 
         phase3Spikes =
             data.phase3Spikes;
@@ -2587,7 +2832,6 @@ function fetchPhaseData() {
 
         normalOperation =
             data.normalOperation;
-
 
         systemFault =
             data.systemFault;
@@ -2692,49 +2936,30 @@ function updateVoltageDisplay() {
 
 function updatePhaseStatusDisplay() {
 
-
     updatePhase(
-
         1,
-
         phase1Selected,
-
         phase1Undervoltage,
-
         phase1Overvoltage,
-
         phase1Spikes
-
     );
 
 
     updatePhase(
-
         2,
-
         phase2Selected,
-
         phase2Undervoltage,
-
         phase2Overvoltage,
-
         phase2Spikes
-
     );
 
 
     updatePhase(
-
         3,
-
         phase3Selected,
-
         phase3Undervoltage,
-
         phase3Overvoltage,
-
         phase3Spikes
-
     );
 
 }
@@ -2757,7 +2982,6 @@ function updatePhase(
     spikes
 
 ) {
-
 
     const card =
         document.getElementById(
@@ -2824,7 +3048,6 @@ function updateDiagnostic(
 
 ) {
 
-
     const element =
         document.getElementById(
             elementId
@@ -2857,7 +3080,6 @@ function updateDiagnostic(
 
 function updateSystemStatusDisplay() {
 
-
     const normalLed =
         document.getElementById(
             "led-normal"
@@ -2889,7 +3111,6 @@ function updateSystemStatusDisplay() {
 ========================================================= */
 
 function updateConnectionStatus() {
-
 
     const status =
         document.getElementById(
@@ -2934,7 +3155,6 @@ let offset = 0;
 
 function animateScope() {
 
-
     canvas.width =
         canvas.offsetWidth;
 
@@ -2946,8 +3166,11 @@ function animateScope() {
     ctx.clearRect(
 
         0,
+
         0,
+
         canvas.width,
+
         canvas.height
 
     );
@@ -2969,7 +3192,6 @@ function animateScope() {
         phase3Rms > 0
 
     ) {
-
 
         ctx.strokeStyle =
             "#00ff41";
@@ -2995,14 +3217,16 @@ function animateScope() {
 
         ) {
 
-
             const y =
 
                 canvas.height / 2 +
 
                 Math.sin(
+
                     (x + offset) * 0.15
+
                 ) *
+
                 amplitude;
 
 

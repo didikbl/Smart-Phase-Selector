@@ -29,9 +29,13 @@ void webserver_update_data(AsyncWebServerRequest *request)
 {
      
      JsonDocument doc;
-     doc["value_1"] =  input_voltage[LINE_1];
+     /*doc["value_1"] =  input_voltage[LINE_1];
      doc["value_2"] =  input_voltage[LINE_2];
-     doc["value_3"] =  input_voltage[LINE_3];
+     doc["value_3"] =  input_voltage[LINE_3];phase1Rms;
+     */
+     doc["phase1Rms"] =  input_voltage[LINE_1];
+     doc["phase2Rms"] =  input_voltage[LINE_2];
+     doc["phase3Rms"] =  input_voltage[LINE_3];
 
      float value_1 = input_voltage[LINE_1];
      float value_2 = input_voltage[LINE_2]; 
@@ -95,9 +99,11 @@ active_line_t webserver_get_active_line()
 
 void webserver_home(AsyncWebServerRequest*request)
 {
-     request->send(LittleFS,"/index.html","text/html");
+     //request->send(LittleFS,"/index.html","text/html");
+     request->send(LittleFS,"/web-ui.html","text/html");
 }
 void webserver_home_example(AsyncWebServerRequest*request)
 {
-     request->send(LittleFS,"/index.html","text/html");
+     //request->send(LittleFS,"/index.html","text/html");
+     request->send(LittleFS,"/web-ui.html","text/html");
 }
