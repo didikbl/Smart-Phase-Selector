@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <vector>
 #include <cmath>
+#include "phase_types.h"
 #include "Arduino.h"
 
 /*@brief Enum for voltage statuses*/
@@ -19,15 +20,6 @@ typedef enum {
         INVALID_DATA,
         VALID_DATA,
 } sensor_data_status_t;
-
-/*@brief Enum for selected phase*/
-typedef enum {
-        PHASE_1_SELECTED,
-        PHASE_2_SELECTED,
-        PHASE_3_SELECTED,
-        NO_PHASE_SELECTED
-
-} selected_phase_t;
 
 /*@brief Enum for selection mode*/
 typedef enum {
