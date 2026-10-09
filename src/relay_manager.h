@@ -1,19 +1,21 @@
+
 #ifndef RELAY_MANAGER_H
 #define RELAY_MANAGER_H
+
 #include "app_actuators.h"
-
-typedef enum {
-        PHASE_1_SELECTED,
-        PHASE_2_SELECTED,
-        PHASE_3_SELECTED,
-        NO_PHASE_SELECTED
-
-} selected_phase_t;
+#include "phase_types.h"
 
 /*
-@brief Manages the relays based on the selected phase
-@param phase The selected phase
-*/
+ * @brief Initializes relay outputs in their defined safe state.
+ * @return true if initialization succeeds, false otherwise.
+ */
+bool relay_manager_init();
+
+/*
+ * @brief Manages the relays based on the confirmed phase.
+ * @param phase The currently confirmed phase.
+ */
 void relay_manager(selected_phase_t phase);
 
 #endif // RELAY_MANAGER_H
+
