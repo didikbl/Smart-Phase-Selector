@@ -59,10 +59,10 @@ typedef enum{
         GPIO_PIN_27 = 27,
         GPIO_PIN_32 = 32,
         GPIO_PIN_33 = 33,
-        GPIO_PIN_34 = 34,
-        GPIO_PIN_35 = 35,
-        GPIO_PIN_36 = 36,
-        GPIO_PIN_39 = 39,
+        GPIO_PIN_34 = 34,//---------INPUT ONLY----------------
+        GPIO_PIN_35 = 35,//---------INPUT ONLY----------------
+        GPIO_PIN_36 = 36,//---------INPUT ONLY----------------
+        GPIO_PIN_39 = 39,//---------INPUT ONLY----------------
 
 } gpio_pin_t;
 
