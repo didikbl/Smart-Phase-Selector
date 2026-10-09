@@ -7,6 +7,12 @@ constexpr float OVERVOLTAGE_MIN_VOLTAGE = 250.0f;
 static selection_mode_t _selection_mode = AUTO_MODE;
 
 
+bool voltage_control_init()
+{
+    _selection_mode = AUTO_MODE;
+
+    return true;
+}
 
 bool check_sensor_data(float voltage)
 {

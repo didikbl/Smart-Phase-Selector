@@ -18,12 +18,13 @@ static float input_voltage[3];
 static active_line_t active_line = NO_ACTIVE_LINE;
 String  selected_line;
 
-void run_webserver()
+bool web_server_init()
 {
           setup_roots();
           server.begin();
           message_println("[SERVEUR ON....]");
           message_println("[SERVEUR RUNNING....]");
+          return true;
 }
 
 //------------------------------------------------SETUP YOUR ROOTS HERE--------------------------------------------

@@ -28,11 +28,17 @@ typedef enum {
 } selection_mode_t;
 
 
-/*
-@brief Check if the sensor data is valid
-@param voltage The voltage reading from the sensor
-@return true if the voltage is valid, false otherwise
-*/
+/**
+ * @brief Initializes the voltage control module.
+ * @return true if initialization succeeds, false otherwise.
+ */
+bool voltage_control_init();
+
+/** 
+ * @brief Check if the sensor data is valid
+ * @param voltage The voltage reading from the sensor
+ * @return true if the voltage is valid, false otherwise
+ */
 bool check_sensor_data(float voltage);
 
 
