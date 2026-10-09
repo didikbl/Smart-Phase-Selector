@@ -1,19 +1,23 @@
-#include "phase_selector.h"
-#include "app_wifi.h"
-//-------------------------------------------TEST STATION MODE-------------------------------------------
-static char sta_ssid []= "S22 Ultra de Didier";
-static char sta_password [] = "didikabelu";
+#include "voltage_control.h"
+#include <Arduino.h>
+//=============================ORCHESTRATOR VARIABLES==========================================
+float phase_1;
+float phase_2;
+float phase_3;
+selected_phase_t phase_selection = NO_PHASE_SELECTED;
 
 void setup() 
 {
-     init_phase_selector_system();
+    
     
      
 }
 
 void loop() 
 {
-     run_phase_selector_app();
+     
+
+     vTaskDelay(1000 / portTICK_PERIOD_MS);
 }
  
 
