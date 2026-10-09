@@ -161,8 +161,6 @@ void start_selection_delay(uint32_t *start_time)
     *start_time = millis();
 }
 
-selection_mode_t selection_mode = AUTO_MODE;
-
 bool set_selection_mode(selection_mode_t mode)
 {
     if (mode != AUTO_MODE && mode != MANUAL_MODE)
@@ -170,7 +168,7 @@ bool set_selection_mode(selection_mode_t mode)
         return false;
     }
 
-    selection_mode = mode;
+    _selection_mode = mode;
     return true;
 }
 

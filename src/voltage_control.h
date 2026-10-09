@@ -1,10 +1,10 @@
 #ifndef VOLTAGE_CONTROL_H
 #define VOLTAGE_CONTROL_H
 
-#include <vector>
-#include <cmath>
 #include <iostream>
 #include <stdint.h>
+#include <vector>
+#include <cmath>
 #include "Arduino.h"
 
 /*@brief Enum for voltage statuses*/
@@ -174,7 +174,7 @@ bool select_manual_phase(
      selected_phase_t requested_phase,
      const std::vector<voltage_status_t>& statuses,
      selected_phase_t *new_phase);
-     
+
 /*@brief Check if the specified phase is overvoltage
  * @param current_phase The phase to check
  * @param statuses The voltage statuses for all three phases
