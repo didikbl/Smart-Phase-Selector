@@ -38,7 +38,7 @@ static gpio_pin_t relay_3_pin = GPIO_PIN_27;
  * @note The electrical interlocking is provided by the hardware
  *       wiring and must prevent simultaneous connection of input phases.
  */
-void relay_manager(selected_phase_t phase)
+bool relay_manager(selected_phase_t phase)
 {
     switch (phase) {
         case PHASE_1_SELECTED:
@@ -72,4 +72,14 @@ void relay_manager(selected_phase_t phase)
             relay_off(relay_3_pin);
             break;
     }
+    return true;
+}
+
+bool relay_manager_init()
+{
+    relay_off(relay_1_pin);
+    relay_off(relay_2_pin);
+    relay_off(relay_3_pin);
+
+    return true;
 }
