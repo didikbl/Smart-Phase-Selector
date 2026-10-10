@@ -11,7 +11,7 @@ static unsigned long _start_attempt_time;
 
 void setup_roots();
 
-void run_webserver();
+bool web_server_init();
 
 void webserver_update_data(AsyncWebServerRequest *request);
 
