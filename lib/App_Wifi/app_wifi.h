@@ -6,7 +6,23 @@
 #include "app_system_log.h"
 
 //----------------------------------------------STA MODE START OVERLOADED FUNCTIONS---------------------------------------
+/** @brief Initializes the Wi-Fi manager.
+ *
+ * @param ssid Wi-Fi network name or access point name.
+ * @param password Wi-Fi password.
+ * @param wifi_mode Requested Wi-Fi operating mode.
+ *
+ * @return true if Wi-Fi initialization succeeds, false otherwise.
+ */
+bool wifi_manager_init(const char* ssid, const char* password,_wifi_mode_t wifi_mode);
 
+/** @brief Starts the Wi-Fi in station mode.
+ *
+ * @param ssid Wi-Fi network name.
+ * @param password Wi-Fi password.
+ *
+ * @return APP_OK if successful, APP_FAIL otherwise.
+ */
 app_err_t _wifi_start_sta(const char* ssid, const char* password);
 
 app_err_t _wifi_start_sta(String ssid, String password);
