@@ -11,6 +11,43 @@
       static _wifi_mode_t _wifi_mode;
       static app_err_t err;
 
+/**
+ * @brief Initializes the Wi-Fi manager.
+ *
+ * @param ssid Wi-Fi network name or access point name.
+ * @param password Wi-Fi password.
+ * @param wifi_mode Requested Wi-Fi operating mode.
+ *
+ * @return true if Wi-Fi initialization succeeds, false otherwise.
+ */
+bool wifi_manager_init(const char* ssid, const char* password,_wifi_mode_t wifi_mode)
+{
+    app_err_t result;
+
+    switch (wifi_mode)
+    {
+        case WIFI_AP_MODE:
+            result = _wifi_start_ap(ssid, password);
+            break;
+
+        case WIFI_STA_MODE:
+            result = _wifi_start_sta(ssid, password);
+            break;
+
+        default:
+            return false;
+    }
+    if (result == APP_OK) 
+    {
+        _wifi_report();
+    } 
+    else 
+    {
+        printf("[WIFI INITIALIZATION ERROR....]\n");
+        printf("[PLEASE REBOOT....]\n");
+    }
+    return result == APP_OK;
+}
 
 app_err_t  _wifi_start_sta(const char *ssid, const char *password)
 {  
@@ -192,7 +229,7 @@ void idle_mode_report()
 {
      
 }
-//------------------------------------ENERGY SAVING FUNCTIONS-------------------------------------------
+/**@*/
 void _wifi_off(){
      WiFi.mode(WIFI_OFF);
 }
