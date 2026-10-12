@@ -178,7 +178,16 @@ bool set_selection_mode(selection_mode_t mode)
     return true;
 }
 
+bool get_selection_mode(selection_mode_t *mode)
+{
+    if (mode == nullptr)
+    {
+        return false;
+    }
 
+    *mode = _selection_mode;
+    return true;
+}
 
 bool select_manual_phase(
     selected_phase_t requested_phase,
