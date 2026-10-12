@@ -9,9 +9,9 @@ static selection_mode_t _selection_mode = AUTO_MODE;
 
 bool voltage_control_init()
 {
-    _selection_mode = AUTO_MODE;
+     set_selection_mode(AUTO_MODE);
 
-    return true;
+     return true;
 }
 
 bool check_sensor_data(float voltage)

@@ -38,14 +38,14 @@ static _wifi_mode_t wifi_mode = WIFI_AP_MODE;
 void orchestrator_init()
 {
     // 1. Put the output in a safe state.
-    //relay_manager_init();
+    relay_manager_init();
 
     // 2. Initialize the voltage measurement system.
     //voltage_sensor_init();
     voltage_sensor_init_simulated();
 
     // 3. Initialize voltage control.
-    //voltage_control_init();
+    voltage_control_init();
 
     // 4. Initialize the local display.
     //lcd_manager_init();

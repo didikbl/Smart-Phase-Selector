@@ -5,8 +5,8 @@
 static voltage_sensor_mode_t _sensor_mode = VOLTAGE_SENSOR_SIMULATION;
 
 static float _phase_1_voltage = 230.0f;
-static float _phase_2_voltage = 225.0f;
-static float _phase_3_voltage = 240.0f;
+static float _phase_2_voltage = 215.0f;
+static float _phase_3_voltage = 250.0f;
 
 bool voltage_sensor_init(voltage_sensor_mode_t mode)
 {
