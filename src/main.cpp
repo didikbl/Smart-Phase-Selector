@@ -1,4 +1,5 @@
 #include "orchestrator.h"
+#include "Arduino.h"
 
 
 void setup() 
@@ -9,6 +10,7 @@ void setup()
 void loop() 
 {
     orchestrator_update();
+    vTaskDelay(pdMS_TO_TICKS(2000));
 }
  
 
