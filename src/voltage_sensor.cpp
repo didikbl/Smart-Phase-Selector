@@ -1,5 +1,4 @@
 #include "voltage_sensor.h"
-
 #include <cmath>
 
 static voltage_sensor_mode_t _sensor_mode = VOLTAGE_SENSOR_SIMULATION;

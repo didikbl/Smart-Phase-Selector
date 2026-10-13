@@ -1,9 +1,8 @@
-
 #ifndef RELAY_MANAGER_H
 #define RELAY_MANAGER_H
-
 #include "app_actuators.h"
-#include "phase_types.h"
+#include "app_types.h"
+
 
 /**
  * @brief Initializes the relays in a safe state.

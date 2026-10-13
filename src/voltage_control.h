@@ -1,32 +1,11 @@
 #ifndef VOLTAGE_CONTROL_H
 #define VOLTAGE_CONTROL_H
-
 #include <iostream>
 #include <stdint.h>
 #include <vector>
 #include <cmath>
-#include "phase_types.h"
 #include "Arduino.h"
-
-/*@brief Enum for voltage statuses*/
-typedef enum {
-        UNDERVOLTAGE,
-        NORMAL,
-        OVERVOLTAGE
-} voltage_status_t;
-
-/*@brief Enum for sensor data statuses*/
-typedef enum {
-        INVALID_DATA,
-        VALID_DATA,
-} sensor_data_status_t;
-
-/*@brief Enum for selection mode*/
-typedef enum {
-        AUTO_MODE,
-        MANUAL_MODE
-} selection_mode_t;
-
+#include "app_types.h"
 
 /**
  * @brief Initializes the voltage control module.

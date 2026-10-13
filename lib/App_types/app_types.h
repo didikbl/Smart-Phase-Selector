@@ -1,7 +1,44 @@
 #ifndef APP_TYPES_H
 #define APP_TYPES_H
 #include "Arduino.h"
-//----------------------------------------------------ACTUATORS-----------------------------------------------
+
+typedef enum {
+    FAULT,
+    SYSTEM_NORMAL
+} system_status_t;
+
+typedef enum {
+        NO_ERROR,
+        VOLTAGE_SENSOR_READ_ERROR,
+        INVALID_VOLTAGE_MEASUREMENTS
+} system_error_t;
+
+typedef enum {
+        UNDERVOLTAGE,
+        NORMAL,
+        OVERVOLTAGE,
+        VOLTAGE_STATUS_INVALID
+} voltage_status_t;
+
+typedef enum {
+    PHASE_1_SELECTED,
+    PHASE_2_SELECTED,
+    PHASE_3_SELECTED,
+    NO_PHASE_SELECTED
+} selected_phase_t;
+
+/*@brief Enum for sensor data statuses*/
+typedef enum {
+        INVALID_DATA,
+        VALID_DATA,
+} sensor_data_status_t;
+
+/*@brief Enum for selection mode*/
+typedef enum {
+        AUTO_MODE,
+        MANUAL_MODE
+} selection_mode_t;
+
 
 typedef enum {
         ACTUATOR_OFF,

@@ -1,5 +1,6 @@
 #include "voltage_control.h"
 
+
 constexpr float UNDERVOLTAGE_MAX_VOLTAGE = 198.0f;
 
 constexpr float OVERVOLTAGE_MIN_VOLTAGE = 250.0f;
